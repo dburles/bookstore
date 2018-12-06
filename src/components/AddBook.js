@@ -3,7 +3,7 @@ import ErrorMessage from './ErrorMessage';
 import { useQuery, useMutation } from './hooks/graphql';
 import { useFormState } from './hooks/useFormState';
 
-const authorsQuery = `
+const authorsQuery = /* GraphQL */ `
   query authors {
     authors {
       id
@@ -12,7 +12,7 @@ const authorsQuery = `
   }
 `;
 
-const bookAddMutation = `
+const bookAddMutation = /* GraphQL */ `
   mutation bookAdd($input: BookAddInput!) {
     bookAdd(input: $input) {
       book {

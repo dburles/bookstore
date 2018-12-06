@@ -3,7 +3,7 @@ import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
 import { useQuery, useMutation } from './hooks/graphql';
 
-const booksQuery = `
+const booksQuery = /* GraphQL */ `
   query books {
     books {
       id
@@ -15,7 +15,7 @@ const booksQuery = `
   }
 `;
 
-const bookRemoveMutation = `
+const bookRemoveMutation = /* GraphQL */ `
   mutation bookRemove($input: BookRemoveInput!) {
     bookRemove(input: $input) {
       book {
