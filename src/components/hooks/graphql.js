@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const mutationSubscriptions = [];
+const subscriptions = [];
 const onMutation = callback => {
-  mutationSubscriptions.push(callback);
-  return () =>
-    mutationSubscriptions.splice(mutationSubscriptions.indexOf(callback), 1);
+  subscriptions.push(callback);
+  return () => subscriptions.splice(subscriptions.indexOf(callback), 1);
 };
 
 const requestOptions = {
@@ -66,10 +65,10 @@ export const useMutation = (uri, query) => {
 
   const mutate = options => {
     setState({ ...state, loading: true });
-    return fetchGraphQL(uri, query, options)
+    fetchGraphQL(uri, query, options)
       .then(data => {
         if (!data.error) {
-          mutationSubscriptions.forEach(cb => cb());
+          subscriptions.forEach(cb => cb());
         }
         return data;
       })

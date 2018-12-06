@@ -39,8 +39,6 @@ const Books = props => {
     bookRemoveMutation,
   );
 
-  // console.log(books, loading, error);
-
   if (loading) {
     return 'Loading...';
   }
