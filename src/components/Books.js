@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Flex, Box } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
 import { useQuery, useMutation } from './hooks/graphql';
@@ -48,23 +49,29 @@ const Books = props => {
   }
 
   return (
-    <ul>
+    <Flex flexDirection="column">
       {books.map(book => (
-        <li key={book.id}>
-          {book.id} {book.title} by {book.author.name}{' '}
-          <button
-            disabled={removingBookId === book.id}
-            onClick={() => {
-              setRemovingBookId(book.id);
-              mutate({ variables: { input: { id: book.id } } });
-            }}
-          >
-            x
-          </button>
-        </li>
+        <Box key={book.id}>
+          <Flex alignItems="center" m={1}>
+            <Box width={1} pr={3}>
+              {book.id} {book.title} by {book.author.name}{' '}
+            </Box>
+            <Box>
+              <button
+                disabled={removingBookId === book.id}
+                onClick={() => {
+                  setRemovingBookId(book.id);
+                  mutate({ variables: { input: { id: book.id } } });
+                }}
+              >
+                x
+              </button>
+            </Box>
+          </Flex>
+        </Box>
       ))}
       <AddBook />
-    </ul>
+    </Flex>
   );
 };
 
