@@ -1,22 +1,79 @@
 import { useState, useEffect } from 'react';
-import { onMutation } from '../../lib/graphql';
 
-export const useQuery = (query, variables) => {
+const mutationSubscriptions = [];
+export const onMutation = callback => {
+  mutationSubscriptions.push(callback);
+  return () =>
+    mutationSubscriptions.splice(mutationSubscriptions.indexOf(callback), 1);
+};
+
+const requestOptions = {
+  method: 'post',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+};
+
+const fetchOptions = (query, options) => ({
+  ...requestOptions,
+  ...options.requestOptionsOverride,
+  body: JSON.stringify({ query, variables: options.variables || null }),
+});
+
+const fetchGraphQL = (uri, query, options) => {
+  return fetch(uri, fetchOptions(query, options))
+    .then(response => response.json())
+    .then(handleGraphQLResponse)
+    .catch(error => ({
+      data: {},
+      loading: false,
+      error: error.message,
+    }));
+};
+
+const handleGraphQLResponse = response => {
+  if (response.errors) {
+    response.errors.forEach(console.error);
+  }
+  return {
+    data: response.data || {},
+    loading: false,
+    ...(response.errors && { error: 'GraphQL Error' }),
+  };
+};
+
+export const useQuery = (uri, query, options = {}) => {
   const [state, setState] = useState({ data: {}, loading: true });
 
-  const handle = ({ data = {}, error, errors }) => {
-    const errorMessage = errors ? 'Bad GraphQL query' : error;
-    setState({ data, error: errorMessage, loading: false });
-  };
+  const fetcher = () => fetchGraphQL(uri, query, options).then(setState);
 
   useEffect(
     () => {
-      query.fetch(variables).then(handle);
+      fetcher();
     },
-    [variables],
+    [uri, query, options.variables],
   );
 
-  useEffect(() => onMutation(() => query.refetch().then(handle)), []);
+  useEffect(() => onMutation(() => fetcher()), []);
 
   return state;
+};
+
+export const useMutation = (uri, query) => {
+  const [state, setState] = useState({ data: {}, loading: false });
+
+  const mutate = options => {
+    setState({ ...state, loading: true });
+    return fetchGraphQL(uri, query, options)
+      .then(data => {
+        if (!data.error) {
+          mutationSubscriptions.forEach(cb => cb());
+        }
+        return data;
+      })
+      .then(setState);
+  };
+
+  return { mutate, ...state };
 };

@@ -1,58 +1,65 @@
 import React from 'react';
-import { GraphQLQuery, GraphQLMutation } from '../lib/graphql';
-import { useQuery } from './hooks/graphql';
+import ErrorMessage from './ErrorMessage';
+import { useQuery, useMutation } from './hooks/graphql';
 import { useFormState } from './hooks/useFormState';
 
-const query = GraphQLQuery({
-  url: 'http://localhost:3010/graphql',
-  query: `
-    query authors {
-      authors {
-        id
-        name
-      }
+const authorsQuery = `
+  query authors {
+    authors {
+      id
+      name
     }
-  `,
-});
+  }
+`;
 
-const mutation = GraphQLMutation({
-  url: 'http://localhost:3010/graphql',
-  query: `
-    mutation bookAdd($input: BookAddInput!) {
-      bookAdd(input: $input) {
-        book {
-          id
-          title
-        }
+const bookAddMutation = `
+  mutation bookAdd($input: BookAddInput!) {
+    bookAdd(input: $input) {
+      book {
+        id
+        title
       }
     }
-  `,
-});
+  }
+`;
 
 const AddBook = props => {
   const [formState, onChange] = useFormState({
     authorId: '',
     title: '',
   });
+
   const {
     data: { authors = [] },
     loading,
     error,
-  } = useQuery(query);
+  } = useQuery('http://localhost:3010/graphql', authorsQuery);
+
+  const {
+    mutate: addBook,
+    loading: isSubmitting,
+    error: bookAddError,
+  } = useMutation('http://localhost:3010/graphql', bookAddMutation);
+
+  // console.log(error, bookAddError);
+
+  if (error || bookAddError) {
+    return <ErrorMessage>{error || bookAddError}</ErrorMessage>;
+  }
 
   return (
     <form
       onSubmit={event => {
         event.preventDefault();
-        console.log(formState);
-        mutation.fetch({
+
+        addBook({
           variables: {
             input: formState,
           },
         });
       }}
     >
-      <select onChange={onChange} name="authorId">
+      <select onChange={onChange} name="authorId" disabled={loading}>
         <option value="">Select Author</option>
         {authors.map(author => (
           <option key={author.id} value={author.id}>
@@ -61,16 +68,15 @@ const AddBook = props => {
         ))}
       </select>
       <input
+        disabled={loading}
         type="text"
         name="title"
         value={formState.title}
         onChange={onChange}
       />
-      <button disabled={!formState.authorId}>Add</button>
+      <button disabled={!formState.authorId || isSubmitting}>Add</button>
     </form>
   );
 };
-
-AddBook.propTypes = {};
 
 export default AddBook;

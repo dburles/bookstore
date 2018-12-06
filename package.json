@@ -15,7 +15,9 @@
   "scripts": {
     "start": "NODE_ENV=development parcel src/index.html",
     "build": "parcel build --detailed-report src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",
@@ -30,7 +32,12 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-react-hooks": "0.0.0",
     "parcel-bundler": "^1.10.3",
-    "prettier": "^1.15.3"
+    "prettier": "^1.15.3",
+    "@storybook/react": "^4.0.12",
+    "@storybook/addon-actions": "^4.0.12",
+    "@storybook/addon-links": "^4.0.12",
+    "@storybook/addons": "^4.0.12",
+    "babel-loader": "^8.0.4"
   },
   "dependencies": {
     "@reach/router": "^1.2.1",

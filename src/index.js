@@ -1,5 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Books from './lib/components/Books';
+import { Flex } from 'rebass';
+import Books from './components/Books';
 
-render(<Books />, document.getElementById('root'));
+render(
+  <Flex justifyContent="center">
+    <Books />
+    <Books />
+  </Flex>,
+  document.getElementById('root'),
+);
