@@ -1,0 +1,92 @@
+{
+  "name": "bookstore",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": "10",
+    "npm": "6"
+  },
+  "browserslist": [
+    "< 0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "scripts": {
+    "start": "NODE_ENV=development parcel src/index.html",
+    "build": "parcel build --detailed-report src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.9.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import-order-alphabetical": "0.0.1",
+    "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-react-hooks": "0.0.0",
+    "parcel-bundler": "^1.10.3",
+    "prettier": "^1.15.3"
+  },
+  "dependencies": {
+    "@reach/router": "^1.2.1",
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "^16.7.0-alpha.2",
+    "rebass": "^3.0.0-12",
+    "styled-components": "^4.1.2",
+    "styled-system": "^3.1.11"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true,
+      "browser": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "plugins": [
+      "prettier",
+      "react",
+      "react-hooks",
+      "import",
+      "eslint-plugin-import-order-alphabetical"
+    ],
+    "extends": [
+      "plugin:prettier/recommended",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "prettier/react",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "trailingComma": "all"
+        }
+      ],
+      "react-hooks/rules-of-hooks": "error",
+      "import-order-alphabetical/order": "error"
+    }
+  },
+  "babel": {
+    "plugins": [
+      "@babel/proposal-class-properties",
+      "@babel/transform-runtime",
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragmaFrag": "React.Fragment"
+        }
+      ]
+    ]
+  }
+}
