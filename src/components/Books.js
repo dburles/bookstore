@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { GraphQLQuery } from '../graphql';
+import { GraphQLQuery } from '../lib/graphql';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
 import { useQuery } from './hooks/graphql';

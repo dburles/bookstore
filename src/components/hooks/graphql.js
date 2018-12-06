@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { onMutation } from '../../graphql';
+import { onMutation } from '../../lib/graphql';
 
 export const useQuery = (query, variables) => {
   const [state, setState] = useState({ data: {}, loading: true });

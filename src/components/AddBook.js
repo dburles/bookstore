@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraphQLQuery, GraphQLMutation } from '../graphql';
+import { GraphQLQuery, GraphQLMutation } from '../lib/graphql';
 import { useQuery } from './hooks/graphql';
 import { useFormState } from './hooks/useFormState';
 
