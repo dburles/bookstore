@@ -65,7 +65,7 @@ export const useMutation = (uri, query) => {
 
   const mutate = options => {
     setState({ ...state, loading: true });
-    fetchGraphQL(uri, query, options)
+    return fetchGraphQL(uri, query, options)
       .then(data => {
         if (!data.error) {
           subscriptions.forEach(cb => cb());
