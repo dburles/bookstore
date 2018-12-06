@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const mutationSubscriptions = [];
-export const onMutation = callback => {
+const onMutation = callback => {
   mutationSubscriptions.push(callback);
   return () =>
     mutationSubscriptions.splice(mutationSubscriptions.indexOf(callback), 1);
@@ -34,6 +34,7 @@ const fetchGraphQL = (uri, query, options) => {
 
 const handleGraphQLResponse = response => {
   if (response.errors) {
+    // eslint-disable-next-line
     response.errors.forEach(console.error);
   }
   return {
