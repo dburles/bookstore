@@ -50,6 +50,12 @@ window.queryCache = queryCache;
 export const useQuery = (uri, query, options = {}) => {
   const [refetchCache, setRefetchCache] = useState();
 
+  const cached = queryCache.find(
+    qc =>
+      JSON.stringify({ uri: qc.uri, query: qc.query, options: qc.options }) ===
+      JSON.stringify({ uri, query, options }),
+  );
+
   // Refetch after mutation
   useEffect(
     () =>
@@ -57,12 +63,6 @@ export const useQuery = (uri, query, options = {}) => {
         fetchGraphQL(uri, query, cached.options).then(setRefetchCache),
       ),
     [],
-  );
-
-  const cached = queryCache.find(
-    qc =>
-      JSON.stringify({ uri: qc.uri, query: qc.query, options: qc.options }) ===
-      JSON.stringify({ uri, query, options }),
   );
 
   if (!cached) {
