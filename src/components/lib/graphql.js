@@ -81,8 +81,6 @@ export const useQuery = (uri, query, options = {}) => {
     throw cache.promise;
   }
 
-  // cache.response is the result of the initial fetch
-  // refetchCache is the result of a subsequent fetch after a mutation occurs
   if (cached.response) {
     return cached.response;
   }
