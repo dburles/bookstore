@@ -8,6 +8,7 @@ render(
     <Suspense fallback={<p>Loading...</p>}>
       <Books />
       <Books />
+      <Books />
     </Suspense>
   </Flex>,
   document.getElementById('root'),
