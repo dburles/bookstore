@@ -43,6 +43,45 @@ const handleGraphQLResponse = response => {
   };
 };
 
+export const GraphQLQuery = (uri, query) => {
+  let cache = {
+    options: undefined,
+    promise: undefined,
+    response: undefined,
+  };
+
+  return (options = {}) => {
+    const [refetchCache, setRefetchCache] = useState();
+
+    if (JSON.stringify(cache.options) !== JSON.stringify(options)) {
+      cache.options = options;
+
+      cache.promise = fetchGraphQL(uri, query, options).then(
+        response => (cache.response = response),
+      );
+
+      throw cache.promise;
+    }
+
+    // Refetch after mutation
+    useEffect(
+      () =>
+        onMutation(() =>
+          fetchGraphQL(uri, query, cache.options).then(setRefetchCache),
+        ),
+      [options.variables],
+    );
+
+    // cache.response is the result of the initial fetch
+    // refetchCache is the result of a subsequent fetch after a mutation occurs
+    if (refetchCache || cache.response) {
+      return refetchCache || cache.response;
+    }
+
+    throw cache.promise;
+  };
+};
+
 export const useQuery = (uri, query, options = {}) => {
   const [state, setState] = useState({ data: {}, loading: true });
 

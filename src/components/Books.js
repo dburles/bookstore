@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Box } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
-import { useQuery, useMutation } from './hooks/graphql';
+import { useQuery, useMutation, GraphQLQuery } from './hooks/graphql';
 
 const booksQuery = /* GraphQL */ `
   query books {
@@ -26,12 +26,13 @@ const bookRemoveMutation = /* GraphQL */ `
   }
 `;
 
+const useBooks = GraphQLQuery('http://localhost:3010/graphql', booksQuery);
+
 const Books = props => {
   const {
     data: { books = [] },
-    loading,
     error,
-  } = useQuery('http://localhost:3010/graphql', booksQuery);
+  } = useBooks();
 
   const [removingBookId, setRemovingBookId] = useState('');
 
@@ -39,10 +40,6 @@ const Books = props => {
     'http://localhost:3010/graphql',
     bookRemoveMutation,
   );
-
-  if (loading) {
-    return 'Loading...';
-  }
 
   if (error) {
     return <ErrorMessage>{error}</ErrorMessage>;
