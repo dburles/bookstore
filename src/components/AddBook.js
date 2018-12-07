@@ -1,7 +1,7 @@
 import React from 'react';
 import ErrorMessage from './ErrorMessage';
-import { useMutation, GraphQLQuery } from './hooks/graphql';
 import { useFormState } from './hooks/useFormState';
+import { useMutation, GraphQLQuery } from './lib/graphql';
 
 const authorsQuery = /* GraphQL */ `
   query authors {

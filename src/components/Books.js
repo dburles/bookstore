@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Box } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
-import { useQuery, useMutation, GraphQLQuery } from './hooks/graphql';
+import { useMutation, GraphQLQuery } from './lib/graphql';
 
 const booksQuery = /* GraphQL */ `
   query books {
