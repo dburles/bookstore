@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Flex, Box } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
-import { useMutation, GraphQLQuery } from './lib/graphql';
+import { useMutation, useQuery } from './lib/graphql';
 
 const booksQuery = /* GraphQL */ `
   query books {
@@ -26,13 +26,11 @@ const bookRemoveMutation = /* GraphQL */ `
   }
 `;
 
-const useBooks = GraphQLQuery('http://localhost:3010/graphql', booksQuery);
-
 const Books = props => {
   const {
     data: { books = [] },
     error,
-  } = useBooks();
+  } = useQuery('http://localhost:3010/graphql', booksQuery);
 
   const [removingBookId, setRemovingBookId] = useState('');
 
