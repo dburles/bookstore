@@ -1,6 +1,6 @@
 import React from 'react';
 import ErrorMessage from './ErrorMessage';
-import { useQuery, useMutation } from './hooks/graphql';
+import { useMutation, GraphQLQuery } from './hooks/graphql';
 import { useFormState } from './hooks/useFormState';
 
 const authorsQuery = /* GraphQL */ `
@@ -23,6 +23,8 @@ const bookAddMutation = /* GraphQL */ `
   }
 `;
 
+const useAuthors = GraphQLQuery('http://localhost:3010/graphql', authorsQuery);
+
 const AddBook = props => {
   const [formState, onChange] = useFormState({
     authorId: '',
@@ -31,9 +33,8 @@ const AddBook = props => {
 
   const {
     data: { authors = [] },
-    loading,
     error,
-  } = useQuery('http://localhost:3010/graphql', authorsQuery);
+  } = useAuthors();
 
   const {
     mutate: addBook,
@@ -59,7 +60,7 @@ const AddBook = props => {
         });
       }}
     >
-      <select onChange={onChange} name="authorId" disabled={loading}>
+      <select onChange={onChange} name="authorId">
         <option value="">Select Author</option>
         {authors.map(author => (
           <option key={author.id} value={author.id}>
@@ -68,7 +69,6 @@ const AddBook = props => {
         ))}
       </select>
       <input
-        disabled={loading}
         type="text"
         name="title"
         value={formState.title}
