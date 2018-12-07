@@ -48,7 +48,7 @@ const queryCache = [];
 window.queryCache = queryCache;
 
 export const useQuery = (uri, query, options = {}) => {
-  const [refetchCache, setRefetchCache] = useState();
+  const [, render] = useState();
 
   const cached = queryCache.find(
     qc =>
@@ -56,12 +56,13 @@ export const useQuery = (uri, query, options = {}) => {
       JSON.stringify({ uri, query, options }),
   );
 
-  // Refetch after mutation
+  // Invalidate cache after mutation and trigger re-render
   useEffect(
     () =>
-      onMutation(() =>
-        fetchGraphQL(uri, query, cached.options).then(setRefetchCache),
-      ),
+      onMutation(() => {
+        queryCache.length = 0;
+        render();
+      }),
     [],
   );
 
@@ -82,8 +83,8 @@ export const useQuery = (uri, query, options = {}) => {
 
   // cache.response is the result of the initial fetch
   // refetchCache is the result of a subsequent fetch after a mutation occurs
-  if (refetchCache || cached.response) {
-    return refetchCache || cached.response;
+  if (cached.response) {
+    return cached.response;
   }
 
   throw cached.promise;
