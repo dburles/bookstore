@@ -56,11 +56,10 @@ export const useQuery = (uri, query, options = {}) => {
       JSON.stringify({ uri, query, options }),
   );
 
-  // Invalidate cache after mutation and trigger re-render
+  // Trigger re-render after mutation
   useEffect(
     () =>
       onMutation(() => {
-        queryCache.length = 0;
         render();
       }),
     [],
@@ -96,6 +95,8 @@ export const useMutation = (uri, query) => {
     setState({ ...state, loading: true });
     const promise = fetchGraphQL(uri, query, options).then(data => {
       if (!data.error) {
+        // Invalidate cache
+        queryCache.length = 0;
         subscriptions.forEach(cb => cb());
       }
       return data;
