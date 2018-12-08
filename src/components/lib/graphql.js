@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const subscriptions = [];
 const onMutation = callback => {
@@ -90,18 +90,28 @@ export const useQuery = (uri, query, options = {}) => {
 
 export const useMutation = (uri, query) => {
   const [state, setState] = useState({ data: {}, loading: false });
+  const mountedRef = useRef(false);
 
   const mutate = options => {
     setState({ ...state, loading: true });
-    return fetchGraphQL(uri, query, options)
-      .then(data => {
-        if (!data.error) {
-          subscriptions.forEach(cb => cb());
-        }
-        return data;
-      })
-      .then(setState);
+    const promise = fetchGraphQL(uri, query, options).then(data => {
+      if (!data.error) {
+        subscriptions.forEach(cb => cb());
+      }
+      return data;
+    });
+
+    if (mountedRef.current) {
+      promise.then(setState);
+    }
+
+    return promise;
   };
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => (mountedRef.current = false);
+  });
 
   return { mutate, ...state };
 };
