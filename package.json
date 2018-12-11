@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@reach/router": "^1.2.1",
+    "@sindresorhus/fnv1a": "^1.0.0",
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2",
     "rebass": "^3.0.0-12",

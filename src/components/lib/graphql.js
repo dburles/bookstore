@@ -1,5 +1,5 @@
+import fnv1a from '@sindresorhus/fnv1a';
 import { useState, useEffect, useRef } from 'react';
-
 const subscriptions = [];
 const onMutation = callback => {
   subscriptions.push(callback);
@@ -43,18 +43,15 @@ const handleGraphQLResponse = response => {
   };
 };
 
-const queryCache = [];
+let queryCache = {};
 
 window.queryCache = queryCache;
 
 export const useQuery = (uri, query, options = {}) => {
   const [, render] = useState();
 
-  const cached = queryCache.find(
-    qc =>
-      JSON.stringify({ uri: qc.uri, query: qc.query, options: qc.options }) ===
-      JSON.stringify({ uri, query, options }),
-  );
+  const key = fnv1a(uri + query + JSON.stringify(options.variables));
+  const cached = queryCache[key];
 
   // Trigger re-render after mutation
   useEffect(
@@ -66,18 +63,12 @@ export const useQuery = (uri, query, options = {}) => {
   );
 
   if (!cached) {
-    const cache = {
-      uri,
-      query,
-      options,
-      promise: fetchGraphQL(uri, query, options).then(
-        response => (cache.response = response),
-      ),
-    };
+    queryCache[key] = {};
+    queryCache[key].promise = fetchGraphQL(uri, query, options).then(
+      response => (queryCache[key].response = response),
+    );
 
-    queryCache.push(cache);
-
-    throw cache.promise;
+    throw queryCache[key].promise;
   }
 
   if (cached.response) {
@@ -96,7 +87,7 @@ export const useMutation = (uri, query) => {
     const promise = fetchGraphQL(uri, query, options).then(data => {
       if (!data.error) {
         // Invalidate cache
-        queryCache.length = 0;
+        queryCache = {};
         subscriptions.forEach(cb => cb());
       }
       return data;
