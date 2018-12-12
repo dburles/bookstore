@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Flex, Box } from 'rebass';
+import { Flex, Box, Heading } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
 import { useMutation, useQuery } from './lib/graphql';
 
-const booksQuery = /* GraphQL */ `
+const authorQuery = /* GraphQL */ `
   query author($id: Int!) {
     author(id: $id) {
+      name
       books {
         id
         title
@@ -32,7 +33,7 @@ const AuthorBooks = props => {
   const {
     data: { author },
     error,
-  } = useQuery('http://localhost:3010/graphql', booksQuery, {
+  } = useQuery('http://localhost:3010/graphql', authorQuery, {
     variables: { id: props.authorId },
   });
 
@@ -49,6 +50,7 @@ const AuthorBooks = props => {
 
   return (
     <Flex flexDirection="column">
+      <Heading>{author.name}</Heading>
       {author.books.map(book => (
         <Box key={book.id}>
           <Flex alignItems="center" m={1}>
