@@ -104,6 +104,7 @@ export const useQuery = (uri, query, options = {}) => {
 export const useMutation = (uri, query) => {
   const [state, setState] = useState({ data: {}, loading: false });
   const mountedRef = useRef(false);
+
   useEffect(() => {
     mountedRef.current = true;
     return () => (mountedRef.current = false);
