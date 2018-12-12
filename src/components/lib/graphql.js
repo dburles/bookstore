@@ -1,10 +1,18 @@
 import fnv1a from '@sindresorhus/fnv1a';
 import { useState, useEffect, useRef } from 'react';
-const subscriptions = [];
-const onMutation = callback => {
-  subscriptions.push(callback);
-  return () => subscriptions.splice(subscriptions.indexOf(callback), 1);
+
+const createSubscription = () => {
+  const subscriptions = [];
+  const subscribe = callback => {
+    subscriptions.push(callback);
+    return () => subscriptions.splice(subscriptions.indexOf(callback), 1);
+  };
+  const notify = () => subscriptions.forEach(cb => cb());
+  return { notify, subscribe };
 };
+
+const mutations = createSubscription();
+const cacheUpdates = createSubscription();
 
 const requestOptions = {
   method: 'post',
@@ -43,26 +51,30 @@ const handleGraphQLResponse = response => {
   };
 };
 
-let queryCache = {};
-
-window.queryCache = queryCache;
+const queryCache = {};
 
 export const useQuery = (uri, query, options = {}) => {
-  const [, render] = useState();
+  const [isRefetch, setRefetched] = useState(false);
 
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
   const cached = queryCache[key];
 
   // Trigger re-render after mutation
-  useEffect(
-    () =>
-      onMutation(() => {
-        render();
-      }),
-    [],
-  );
+  useEffect(() => {
+    return mutations.subscribe(() => {
+      fetchGraphQL(uri, query, options).then(response => {
+        queryCache[key] = {
+          response,
+        };
+        cacheUpdates.notify();
+      });
+    });
+  }, []);
 
-  if (!cached) {
+  // Listen for cache updates
+  useEffect(() => cacheUpdates.subscribe(() => setRefetched(true)), []);
+
+  if (!cached && !isRefetch) {
     queryCache[key] = {};
     queryCache[key].promise = fetchGraphQL(uri, query, options).then(
       response => (queryCache[key].response = response),
@@ -81,29 +93,25 @@ export const useQuery = (uri, query, options = {}) => {
 export const useMutation = (uri, query) => {
   const [state, setState] = useState({ data: {}, loading: false });
   const mountedRef = useRef(false);
-
-  const mutate = options => {
-    setState({ ...state, loading: true });
-    const promise = fetchGraphQL(uri, query, options).then(data => {
-      if (!data.error) {
-        // Invalidate cache
-        queryCache = {};
-        subscriptions.forEach(cb => cb());
-      }
-      return data;
-    });
-
-    if (mountedRef.current) {
-      promise.then(setState);
-    }
-
-    return promise;
-  };
-
   useEffect(() => {
     mountedRef.current = true;
     return () => (mountedRef.current = false);
-  });
+  }, []);
+
+  const mutate = options => {
+    setState({ ...state, loading: true });
+    const promise = fetchGraphQL(uri, query, options).then(response => {
+      if (!response.error) {
+        mutations.notify();
+      }
+      if (mountedRef.current) {
+        setState(response);
+      }
+      return response;
+    });
+
+    return promise;
+  };
 
   return { mutate, ...state };
 };
