@@ -1,6 +1,5 @@
-import { Router } from '@reach/router';
-import { Link } from '@reach/router';
-import React, { ConcurrentMode, StrictMode, Suspense } from 'react';
+import { Router, Link } from '@reach/router';
+import React, { ConcurrentMode, Suspense } from 'react';
 import { render } from 'react-dom';
 import { Flex, Box } from 'rebass';
 import AuthorBooks from './components/AuthorBooks';
