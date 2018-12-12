@@ -83,7 +83,7 @@ export const useQuery = (uri, query, options = {}) => {
         });
       }
     });
-  });
+  }, []);
 
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
