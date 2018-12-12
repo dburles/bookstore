@@ -55,7 +55,7 @@ const invalidateCache = () =>
   Object.keys(queryCache).forEach(key => (queryCache[key].isStale = true));
 
 export const useQuery = (uri, query, options = {}) => {
-  const [shouldRefetch, setShouldRefetch] = useState(false);
+  const [willRefetch, setWillRefetch] = useState(false);
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
   // Any mounted useQuery must refetch once a mutation occurs
@@ -63,17 +63,15 @@ export const useQuery = (uri, query, options = {}) => {
     return mutations.subscribe(() => {
       // Only refetch if we have existing cache
       if (queryCache[key]) {
-        console.log('refetching');
         fetchGraphQL(uri, query, options).then(response => {
           queryCache[key].response = response;
-          setShouldRefetch(true);
+          setWillRefetch(true);
         });
       }
     });
   });
 
-  if ((!queryCache[key] && !shouldRefetch) || queryCache[key].isStale) {
-    console.log('no cache');
+  if ((!queryCache[key] && !willRefetch) || queryCache[key].isStale) {
     queryCache[key] = {};
     queryCache[key].promise = fetchGraphQL(uri, query, options).then(
       response => (queryCache[key].response = response),
