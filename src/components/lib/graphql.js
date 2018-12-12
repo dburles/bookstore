@@ -12,6 +12,7 @@ const createSubscription = () => {
 };
 
 const mutations = createSubscription();
+const cacheUpdates = createSubscription();
 
 const requestOptions = {
   method: 'post',
@@ -65,16 +66,27 @@ export const useQuery = (uri, query, options = {}) => {
   useEffect(() => {
     return mutations.subscribe(() => {
       refetchRef.current = true;
+
       // Only refetch if we have existing cache and it's stale
-      if (queryCache[key] && queryCache[key].isStale) {
+      if (
+        queryCache[key] &&
+        queryCache[key].isStale &&
+        !queryCache[key].refetching
+      ) {
+        queryCache[key].refetching = true;
+
         fetchGraphQL(uri, query, options).then(response => {
           queryCache[key].response = response;
           queryCache[key].isStale = false;
+          queryCache[key].refetching = false;
+          cacheUpdates.notify();
           update();
         });
       }
     });
   });
+
+  useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
   if (!refetchRef.current && (!queryCache[key] || queryCache[key].isStale)) {
     queryCache[key] = {};
