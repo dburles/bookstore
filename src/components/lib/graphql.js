@@ -59,7 +59,7 @@ export const useQuery = (uri, query, options = {}) => {
   // Tracks whether we should fetch or refetch queries
   const refetchRef = useRef(false);
   // Used to re-render the component after a refetch
-  const [, update] = useState(false);
+  const [, update] = useState();
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
   // Any mounted useQuery must refetch once a mutation occurs
