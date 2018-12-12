@@ -63,27 +63,29 @@ export const useQuery = (uri, query, options = {}) => {
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
   // Any mounted useQuery must refetch once a mutation occurs
-  useEffect(() => {
-    return mutations.subscribe(() => {
-      refetchRef.current = true;
+  useEffect(
+    () =>
+      mutations.subscribe(() => {
+        refetchRef.current = true;
 
-      // Only refetch if we have existing cache and it's stale
-      if (
-        queryCache[key] &&
-        queryCache[key].isStale &&
-        !queryCache[key].refetching
-      ) {
-        queryCache[key].refetching = true;
+        // Only refetch if we have existing cache and it's stale
+        if (
+          queryCache[key] &&
+          queryCache[key].isStale &&
+          !queryCache[key].refetching
+        ) {
+          queryCache[key].refetching = true;
 
-        fetchGraphQL(uri, query, options).then(response => {
-          queryCache[key].response = response;
-          queryCache[key].isStale = false;
-          queryCache[key].refetching = false;
-          cacheUpdates.notify();
-        });
-      }
-    });
-  }, []);
+          fetchGraphQL(uri, query, options).then(response => {
+            queryCache[key].response = response;
+            queryCache[key].isStale = false;
+            queryCache[key].refetching = false;
+            cacheUpdates.notify();
+          });
+        }
+      }),
+    [],
+  );
 
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
