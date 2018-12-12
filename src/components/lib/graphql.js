@@ -80,7 +80,6 @@ export const useQuery = (uri, query, options = {}) => {
           queryCache[key].isStale = false;
           queryCache[key].refetching = false;
           cacheUpdates.notify();
-          update();
         });
       }
     });
