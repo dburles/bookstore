@@ -55,23 +55,28 @@ const invalidateCache = () =>
   Object.keys(queryCache).forEach(key => (queryCache[key].isStale = true));
 
 export const useQuery = (uri, query, options = {}) => {
-  const [willRefetch, setWillRefetch] = useState(false);
+  // Tracks whether we should fetch or refetch queries
+  const refetchRef = useRef(false);
+  // Used to re-render the component after a refetch
+  const [, update] = useState(false);
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
   // Any mounted useQuery must refetch once a mutation occurs
   useEffect(() => {
     return mutations.subscribe(() => {
-      // Only refetch if we have existing cache
-      if (queryCache[key]) {
+      refetchRef.current = true;
+      // Only refetch if we have existing cache and it's stale
+      if (queryCache[key] && queryCache[key].isStale) {
         fetchGraphQL(uri, query, options).then(response => {
           queryCache[key].response = response;
-          setWillRefetch(true);
+          queryCache[key].isStale = false;
+          update();
         });
       }
     });
   });
 
-  if ((!queryCache[key] && !willRefetch) || queryCache[key].isStale) {
+  if (!refetchRef.current && (!queryCache[key] || queryCache[key].isStale)) {
     queryCache[key] = {};
     queryCache[key].promise = fetchGraphQL(uri, query, options).then(
       response => (queryCache[key].response = response),
@@ -95,18 +100,16 @@ export const useMutation = (uri, query) => {
 
   const mutate = options => {
     setState({ ...state, loading: true });
-    const promise = fetchGraphQL(uri, query, options).then(response => {
+    return fetchGraphQL(uri, query, options).then(response => {
+      if (mountedRef.current) {
+        setState(response);
+      }
       if (!response.error) {
         invalidateCache();
         mutations.notify();
       }
-      if (mountedRef.current) {
-        setState(response);
-      }
       return response;
     });
-
-    return promise;
   };
 
   return { mutate, ...state };
