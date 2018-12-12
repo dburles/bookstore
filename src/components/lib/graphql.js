@@ -12,7 +12,6 @@ const createSubscription = () => {
 };
 
 const mutations = createSubscription();
-const cacheUpdates = createSubscription();
 
 const requestOptions = {
   method: 'post',
@@ -52,42 +51,40 @@ const handleGraphQLResponse = response => {
 };
 
 const queryCache = {};
+const invalidateCache = () =>
+  Object.keys(queryCache).forEach(key => (queryCache[key].isStale = true));
 
 export const useQuery = (uri, query, options = {}) => {
-  const [isRefetch, setRefetched] = useState(false);
-
+  const [shouldRefetch, setShouldRefetch] = useState(false);
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
-  const cached = queryCache[key];
 
-  // Trigger re-render after mutation
+  // Any mounted useQuery must refetch once a mutation occurs
   useEffect(() => {
     return mutations.subscribe(() => {
-      fetchGraphQL(uri, query, options).then(response => {
-        queryCache[key] = {
-          response,
-        };
-        cacheUpdates.notify();
-      });
+      // Only refetch if we have existing cache
+      if (queryCache[key]) {
+        console.log('refetching');
+        fetchGraphQL(uri, query, options).then(response => {
+          queryCache[key].response = response;
+          setShouldRefetch(true);
+        });
+      }
     });
-  }, []);
+  });
 
-  // Listen for cache updates
-  useEffect(() => cacheUpdates.subscribe(() => setRefetched(true)), []);
-
-  if (!cached && !isRefetch) {
+  if ((!queryCache[key] && !shouldRefetch) || queryCache[key].isStale) {
+    console.log('no cache');
     queryCache[key] = {};
     queryCache[key].promise = fetchGraphQL(uri, query, options).then(
       response => (queryCache[key].response = response),
     );
-
-    throw queryCache[key].promise;
   }
 
-  if (cached.response) {
-    return cached.response;
+  if (queryCache[key].response) {
+    return queryCache[key].response;
   }
 
-  throw cached.promise;
+  throw queryCache[key].promise;
 };
 
 export const useMutation = (uri, query) => {
@@ -102,6 +99,7 @@ export const useMutation = (uri, query) => {
     setState({ ...state, loading: true });
     const promise = fetchGraphQL(uri, query, options).then(response => {
       if (!response.error) {
+        invalidateCache();
         mutations.notify();
       }
       if (mountedRef.current) {
