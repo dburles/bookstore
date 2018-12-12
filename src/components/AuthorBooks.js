@@ -1,4 +1,3 @@
-import { Link } from '@reach/router';
 import React, { useState } from 'react';
 import { Flex, Box } from 'rebass';
 import AddBook from './AddBook';
@@ -6,12 +5,14 @@ import ErrorMessage from './ErrorMessage';
 import { useMutation, useQuery } from './lib/graphql';
 
 const booksQuery = /* GraphQL */ `
-  query books {
-    books {
-      id
-      title
-      author {
-        name
+  query author($id: Int!) {
+    author(id: $id) {
+      books {
+        id
+        title
+        author {
+          name
+        }
       }
     }
   }
@@ -27,26 +28,28 @@ const bookRemoveMutation = /* GraphQL */ `
   }
 `;
 
-const Books = props => {
+const AuthorBooks = props => {
   const {
-    data: { books = [] },
-    error: queryError,
-  } = useQuery('http://localhost:3010/graphql', booksQuery);
+    data: { author },
+    error,
+  } = useQuery('http://localhost:3010/graphql', booksQuery, {
+    variables: { id: props.authorId },
+  });
 
   const [removingBookId, setRemovingBookId] = useState('');
 
-  const { mutate, error: removeError } = useMutation(
+  const { mutate } = useMutation(
     'http://localhost:3010/graphql',
     bookRemoveMutation,
   );
 
-  if (queryError || removeError) {
-    return <ErrorMessage>{queryError || removeError}</ErrorMessage>;
+  if (error) {
+    return <ErrorMessage>{error}</ErrorMessage>;
   }
 
   return (
     <Flex flexDirection="column">
-      {books.map(book => (
+      {author.books.map(book => (
         <Box key={book.id}>
           <Flex alignItems="center" m={1}>
             <Box width={1} pr={3}>
@@ -71,4 +74,4 @@ const Books = props => {
   );
 };
 
-export default Books;
+export default AuthorBooks;
