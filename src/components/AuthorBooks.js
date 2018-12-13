@@ -11,9 +11,6 @@ const authorQuery = /* GraphQL */ `
       books {
         id
         title
-        author {
-          name
-        }
       }
     }
   }
@@ -55,7 +52,7 @@ const AuthorBooks = props => {
         <Box key={book.id}>
           <Flex alignItems="center" m={1}>
             <Box width={1} pr={3}>
-              {book.id} {book.title} by {book.author.name}{' '}
+              {book.id} {book.title} by {author.name}{' '}
             </Box>
             <Box>
               <button
