@@ -69,7 +69,6 @@ export const useQuery = (uri, query, options = {}) => {
       mutations.subscribe(() => {
         refetchRef.current = true;
 
-        // Only refetch if we have existing cache and it's stale
         if (
           queryCache[key] &&
           queryCache[key].stale &&
