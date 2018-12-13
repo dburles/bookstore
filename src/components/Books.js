@@ -10,18 +10,16 @@ const Books = props => {
     <Layout>
       <Container title={props.title}>
         <Card
-          flexDirection="column"
-          width={1}
           bg="white"
           borderColor="grey.3"
           border="1px solid"
           borderRadius={3}
+          flexWrap="wrap"
         >
           {props.books.map(book => (
             <Card
               key={book.id}
-              px={1}
-              py={1}
+              p={1}
               borderColor="grey.3"
               borderTop="1px solid"
             >
