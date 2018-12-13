@@ -71,6 +71,7 @@
       "eslint:recommended",
       "plugin:react/recommended",
       "prettier/react",
+      "plugin:import/recommended",
       "plugin:import/errors",
       "plugin:import/warnings"
     ],

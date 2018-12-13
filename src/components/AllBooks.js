@@ -49,7 +49,7 @@ const BooksContainer = props => {
 
   return (
     <Books
-      heading="All Books"
+      title="All Books"
       books={books}
       loadingId={loadingId}
       onClickAuthor={(bookId, authorId) => {

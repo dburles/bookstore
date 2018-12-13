@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Flex } from 'rebass';
-import styled from 'styled-components';
-import { space, width, fontSize } from 'styled-system';
+import { Button, Flex, Box, Heading } from 'rebass';
 import ErrorMessage from './ErrorMessage';
 import { useFormState } from './hooks/useFormState';
+import Input from './Input';
 import { useMutation, useQuery } from './lib/graphql';
+import Select from './Select';
 
 const authorsQuery = /* GraphQL */ `
   query authors {
@@ -26,20 +26,7 @@ const bookAddMutation = /* GraphQL */ `
   }
 `;
 
-const Select = styled.select`
-  ${space}
-  ${width}
-  height: 40px;
-`;
-
-const Input = styled.input`
-  ${space}
-  ${width}
-  ${fontSize}
-  height: 40px;
-`;
-
-const AddBook = props => {
+const AddBook = () => {
   const [formState, onChange] = useFormState({
     authorId: '',
     title: '',
@@ -74,7 +61,10 @@ const AddBook = props => {
         });
       }}
     >
-      <Flex flexDirection="row" p={3}>
+      <Heading color="grey.1" fontSize={2} mb={2}>
+        Add book
+      </Heading>
+      <Flex flexDirection="row">
         <Select onChange={onChange} name="authorId">
           <option value="">Select Author</option>
           {authors.map(author => (
@@ -84,17 +74,13 @@ const AddBook = props => {
           ))}
         </Select>
         <Input
-          fontSize={1}
-          px={3}
-          mx={3}
-          width={1}
-          type="text"
           name="title"
           value={formState.title}
           onChange={onChange}
           placeholder="Book title"
+          mx={3}
         />
-        <Button bg="base" disabled={!formState.authorId || isSubmitting}>
+        <Button bg="blue.4" disabled={!formState.authorId || isSubmitting}>
           Add
         </Button>
       </Flex>

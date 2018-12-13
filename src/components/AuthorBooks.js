@@ -1,6 +1,4 @@
-import { navigate } from '@reach/router';
 import React, { useState } from 'react';
-import { unstable_scheduleCallback } from 'scheduler';
 import Books from './Books';
 import ErrorMessage from './ErrorMessage';
 import { useMutation, useQuery } from './lib/graphql';
@@ -54,7 +52,7 @@ const AuthorBooksContainer = props => {
 
   return (
     <Books
-      heading={author.name}
+      title={author.name}
       books={author.books}
       loadingId={loadingId}
       onRemoveBook={bookId => {
