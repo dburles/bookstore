@@ -1,99 +1,79 @@
-import { navigate } from '@reach/router';
-import React, { useState } from 'react';
-import { Text, Flex, Box } from 'rebass';
-import { unstable_scheduleCallback } from 'scheduler';
+import { Link } from '@reach/router';
+import React from 'react';
+import { Text, Flex, Box, Card, Heading } from 'rebass';
 import styled from 'styled-components';
 import AddBook from './AddBook';
-import ErrorMessage from './ErrorMessage';
-import { useMutation, useQuery } from './lib/graphql';
 import Spinner from './Spinner';
 
-const booksQuery = /* GraphQL */ `
-  query books {
-    books {
-      id
-      title
-      author {
-        id
-        name
-      }
-    }
-  }
-`;
-
-const bookRemoveMutation = /* GraphQL */ `
-  mutation bookRemove($input: BookRemoveInput!) {
-    bookRemove(input: $input) {
-      book {
-        id
-      }
-    }
-  }
-`;
-
-const FauxLink = styled.span`
+const FauxLink = styled(Text)`
   text-decoration: underline;
   cursor: pointer;
 `;
 
 const Books = props => {
-  const [loadingId, setLoadingId] = useState();
-
-  const {
-    data: { books = [] },
-    error: queryError,
-  } = useQuery('http://localhost:3010/graphql', booksQuery);
-
-  const [removingBookId, setRemovingBookId] = useState('');
-
-  const { mutate, error: removeError } = useMutation(
-    'http://localhost:3010/graphql',
-    bookRemoveMutation,
-  );
-
-  if (queryError || removeError) {
-    return <ErrorMessage>{queryError || removeError}</ErrorMessage>;
-  }
-
   return (
     <Flex flexDirection="column">
-      {books.map(book => (
-        <Box key={book.id}>
-          <Flex alignItems="center" m={1}>
-            <Box width={1} pr={3}>
-              <Text>
-                {book.id} {book.title} by{' '}
-                <FauxLink
-                  onClick={() => {
-                    setLoadingId(book.id);
-                    unstable_scheduleCallback(() =>
-                      navigate(`/author/${book.author.id}`),
-                    );
-                  }}
-                >
-                  {book.author.name}
-                </FauxLink>
-              </Text>
-            </Box>
-            <Box style={{ position: 'relative' }}>
-              {loadingId === book.id ? (
-                <Spinner />
-              ) : (
-                <button
-                  disabled={removingBookId === book.id}
-                  onClick={() => {
-                    setRemovingBookId(book.id);
-                    mutate({ variables: { input: { id: book.id } } });
-                  }}
-                >
-                  x
-                </button>
-              )}
-            </Box>
-          </Flex>
-        </Box>
-      ))}
-      <AddBook />
+      <Flex alignItems="center" p={3}>
+        <Heading width={1}>{props.heading}</Heading>
+        <Link to="/">Home</Link>
+      </Flex>
+      <Card
+        flexDirection="column"
+        width={1}
+        bg="white"
+        borderColor="grey.3"
+        border="1px solid"
+        borderRadius={3}
+      >
+        <AddBook />
+        {props.books.map(book => (
+          <Card
+            key={book.id}
+            px={1}
+            py={1}
+            borderColor="grey.3"
+            borderTop="1px solid"
+          >
+            <Flex alignItems="top" p={3}>
+              <Box width={1 / 6}>
+                <Text fontSize={0} color="grey.7">
+                  {book.id}
+                </Text>
+              </Box>
+              <Box width={1}>
+                <Text fontSize={2}>{book.title}</Text>
+                <Text fontSize={1} color="grey.8">
+                  {props.onClickAuthor ? (
+                    <FauxLink
+                      color="orange.5"
+                      onClick={() =>
+                        props.onClickAuthor(book.id, book.author.id)
+                      }
+                    >
+                      {book.author.name}
+                    </FauxLink>
+                  ) : (
+                    book.author.name
+                  )}
+                </Text>
+              </Box>
+              <Box width={1 / 5} style={{ position: 'relative' }}>
+                {props.loadingId === book.id ? (
+                  <Spinner />
+                ) : (
+                  <FauxLink
+                    color="grey.7"
+                    fontSize={1}
+                    onClick={() => props.onRemoveBook(book.id)}
+                  >
+                    Remove
+                  </FauxLink>
+                )}
+              </Box>
+            </Flex>
+          </Card>
+        ))}
+      </Card>
     </Flex>
   );
 };

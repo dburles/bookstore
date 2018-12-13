@@ -3,15 +3,20 @@ import React, { ConcurrentMode, Suspense } from 'react';
 import { render } from 'react-dom';
 import { Flex, Box } from 'rebass';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
-import AuthorBooks from './components/AuthorBooks';
-import Books from './components/Books';
+import AuthorBooks from './components/AuthorBooks.container';
+import Books from './components/Books.container';
 import Spinner from './components/Spinner';
 import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
   body {
+    background: ${props => props.theme.colors.grey[1]}
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
     line-height: 1.5;
+  }
+  body, form {
+    margin: 0;
+    padding: 0;
   }
 `;
 
@@ -34,14 +39,7 @@ render(
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyle />
-        <Flex alignItems="center" flexDirection="column">
-          <Box>
-            <Flex>
-              <Link to="/">Home</Link>
-              <Link to="/one">One</Link>
-              <Link to="/two">Two</Link>
-            </Flex>
-          </Box>
+        <Flex flexDirection="column" alignItems="center">
           <Box>
             <Router>
               <FewBooks exact path="/" />
