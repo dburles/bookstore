@@ -85,7 +85,7 @@ export const useQuery = (uri, query, options = {}) => {
           fetchAndUpdateCache().then(() => cacheUpdates.notify());
         }
       }),
-    [JSON.stringify(options.variables)],
+    [options.variables],
   );
 
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
