@@ -52,7 +52,7 @@ const handleGraphQLResponse = response => {
 };
 
 const queryCache = {};
-window.queryCache = queryCache;
+
 const invalidateCache = () =>
   Object.keys(queryCache).forEach(key => (queryCache[key].stale = true));
 
@@ -62,6 +62,13 @@ export const useQuery = (uri, query, options = {}) => {
   // Used to re-render the component after a refetch
   const [, update] = useState();
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
+
+  const fetchAndUpdateCache = () =>
+    fetchGraphQL(uri, query, options).then(response => {
+      queryCache[key].response = response;
+      queryCache[key].stale = false;
+      queryCache[key].refetching = false;
+    });
 
   // Any mounted useQuery must refetch after a mutation occurs
   useEffect(
@@ -75,25 +82,21 @@ export const useQuery = (uri, query, options = {}) => {
           !queryCache[key].refetching
         ) {
           queryCache[key].refetching = true;
-
-          fetchGraphQL(uri, query, options).then(response => {
-            queryCache[key].response = response;
-            queryCache[key].stale = false;
-            queryCache[key].refetching = false;
-            cacheUpdates.notify();
-          });
+          fetchAndUpdateCache().then(() => cacheUpdates.notify());
         }
       }),
-    [],
+    [JSON.stringify(options.variables)],
   );
 
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
+  // Handles a fresh mount
   if (!refetchRef.current && (!queryCache[key] || queryCache[key].stale)) {
-    queryCache[key] = {};
-    queryCache[key].promise = fetchGraphQL(uri, query, options).then(
-      response => (queryCache[key].response = response),
-    );
+    if (!queryCache[key]) {
+      queryCache[key] = {};
+    }
+    queryCache[key].promise = fetchAndUpdateCache();
+    throw queryCache[key].promise;
   }
 
   if (queryCache[key].response) {
