@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Flex, Box, Heading } from 'rebass';
 import AddBook from './AddBook';
 import ErrorMessage from './ErrorMessage';
