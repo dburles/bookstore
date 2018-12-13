@@ -52,8 +52,9 @@ const handleGraphQLResponse = response => {
 };
 
 const queryCache = {};
+window.queryCache = queryCache;
 const invalidateCache = () =>
-  Object.keys(queryCache).forEach(key => (queryCache[key].isStale = true));
+  Object.keys(queryCache).forEach(key => (queryCache[key].stale = true));
 
 export const useQuery = (uri, query, options = {}) => {
   // Tracks whether we should fetch or refetch queries
@@ -71,14 +72,14 @@ export const useQuery = (uri, query, options = {}) => {
         // Only refetch if we have existing cache and it's stale
         if (
           queryCache[key] &&
-          queryCache[key].isStale &&
+          queryCache[key].stale &&
           !queryCache[key].refetching
         ) {
           queryCache[key].refetching = true;
 
           fetchGraphQL(uri, query, options).then(response => {
             queryCache[key].response = response;
-            queryCache[key].isStale = false;
+            queryCache[key].stale = false;
             queryCache[key].refetching = false;
             cacheUpdates.notify();
           });
@@ -89,7 +90,7 @@ export const useQuery = (uri, query, options = {}) => {
 
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
-  if (!refetchRef.current && (!queryCache[key] || queryCache[key].isStale)) {
+  if (!refetchRef.current && (!queryCache[key] || queryCache[key].stale)) {
     queryCache[key] = {};
     queryCache[key].promise = fetchGraphQL(uri, query, options).then(
       response => (queryCache[key].response = response),
