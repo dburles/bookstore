@@ -62,7 +62,7 @@ export const useQuery = (uri, query, options = {}) => {
   const [, update] = useState();
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
-  // Any mounted useQuery must refetch once a mutation occurs
+  // Any mounted useQuery must refetch after a mutation occurs
   useEffect(
     () =>
       mutations.subscribe(() => {
