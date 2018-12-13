@@ -36,7 +36,6 @@ const Books = props => {
                   <Text fontSize={1} color="grey.8">
                     {props.onClickAuthor ? (
                       <FauxLink
-                        color="orange.5"
                         onClick={() =>
                           props.onClickAuthor(book.id, book.author.id)
                         }
@@ -48,18 +47,20 @@ const Books = props => {
                     )}
                   </Text>
                 </Box>
-                <Box ml="auto" style={{ position: 'relative' }}>
-                  {props.loadingId === book.id ? (
-                    <Spinner />
-                  ) : (
-                    <FauxLink
-                      color="grey.7"
-                      fontSize={1}
-                      onClick={() => props.onRemoveBook(book.id)}
-                    >
-                      Remove
-                    </FauxLink>
-                  )}
+                <Box width={1 / 8} style={{ position: 'relative' }}>
+                  <Text textAlign="right">
+                    {props.loadingId === book.id ? (
+                      <Spinner />
+                    ) : (
+                      <FauxLink
+                        color="grey.7"
+                        fontSize={1}
+                        onClick={() => props.onRemoveBook(book.id)}
+                      >
+                        Remove
+                      </FauxLink>
+                    )}
+                  </Text>
                 </Box>
               </Flex>
             </Card>

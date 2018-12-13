@@ -6,4 +6,8 @@ const FauxLink = styled(Text)`
   cursor: pointer;
 `;
 
+FauxLink.defaultProps = {
+  color: 'base',
+};
+
 export default FauxLink;
