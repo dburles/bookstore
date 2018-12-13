@@ -1,3 +1,4 @@
+import { navigate } from '@reach/router';
 import React from 'react';
 import { Flex, Box, Heading } from 'rebass';
 import AddAuthor from './AddAuthor';
@@ -8,7 +9,7 @@ const Layout = props => {
     <>
       <Flex bg="grey.9" py={4} justifyContent="center">
         <Flex px={3} flexDirection="column" width={[1, 900]}>
-          <Heading color="grey.1" mb={4}>
+          <Heading color="grey.1" mb={4} onClick={() => navigate('/')}>
             📚 Book 🛍 Store
           </Heading>
 
