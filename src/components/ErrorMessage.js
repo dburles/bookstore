@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Box } from 'rebass';
+import { Box, Text } from 'rebass';
 
 const ErrorMessage = props => {
   return (
-    <Box p={3} bg="red" color="white">
-      {props.children}
+    <Box m={3} py={3} px={5} bg="red.6" color="white">
+      <Text fontWeight="bold">{props.children}</Text>
     </Box>
   );
 };
