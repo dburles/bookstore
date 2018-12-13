@@ -8,7 +8,7 @@ import GlobalStyle from './components/GlobalStyle';
 import Spinner from './components/Spinner';
 import theme from './theme';
 
-const FewBooks = () => (
+const SuspenseAllBooks = () => (
   <Suspense maxDuration={2000} fallback={<Spinner full />}>
     <AllBooks />
   </Suspense>
@@ -23,14 +23,12 @@ const SuspenseAuthorBooks = props => (
 render(
   <ConcurrentMode>
     <ThemeProvider theme={theme}>
-      <>
-        <GlobalStyle />
+      <GlobalStyle />
 
-        <Router>
-          <FewBooks exact path="/" />
-          <SuspenseAuthorBooks path="/author/:authorId" />
-        </Router>
-      </>
+      <Router>
+        <SuspenseAllBooks exact path="/" />
+        <SuspenseAuthorBooks path="/author/:authorId" />
+      </Router>
     </ThemeProvider>
   </ConcurrentMode>,
   document.getElementById('root'),
