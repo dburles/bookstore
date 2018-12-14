@@ -32,6 +32,4 @@ const Layout = props => {
   );
 };
 
-Layout.propTypes = {};
-
 export default Layout;
