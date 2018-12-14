@@ -36,7 +36,7 @@ const BooksContainer = props => {
     error: queryError,
   } = useQuery('http://localhost:3010/graphql', booksQuery);
 
-  const [removingBookId, setRemovingBookId] = useState('');
+  const [removingBookIds, setRemovingBookIds] = useState('');
 
   const { mutate, error: removeError } = useMutation(
     'http://localhost:3010/graphql',
@@ -57,9 +57,10 @@ const BooksContainer = props => {
         unstable_scheduleCallback(() => navigate(`/author/${authorId}`));
       }}
       onRemoveBook={bookId => {
-        setRemovingBookId(bookId);
+        setRemovingBookIds([...new Set([...removingBookIds, bookId])]);
         mutate({ variables: { input: { id: bookId } } });
       }}
+      removingBookIds={removingBookIds}
     />
   );
 };

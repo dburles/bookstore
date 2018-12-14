@@ -30,35 +30,33 @@ const bookRemoveMutation = /* GraphQL */ `
 `;
 
 const AuthorBooksContainer = props => {
-  const [loadingId, setLoadingId] = useState();
-
   const {
     data: { author },
-    error,
+    error: queryError,
   } = useQuery('http://localhost:3010/graphql', authorQuery, {
     variables: { id: props.authorId },
   });
 
-  const [removingBookId, setRemovingBookId] = useState('');
+  const [removingBookIds, setRemovingBookIds] = useState('');
 
-  const { mutate } = useMutation(
+  const { mutate, error: removeError } = useMutation(
     'http://localhost:3010/graphql',
     bookRemoveMutation,
   );
 
-  if (error) {
-    return <ErrorMessage>{error}</ErrorMessage>;
+  if (queryError || removeError) {
+    return <ErrorMessage>{queryError || removeError}</ErrorMessage>;
   }
 
   return (
     <Books
       title={author.name}
       books={author.books}
-      loadingId={loadingId}
       onRemoveBook={bookId => {
-        setRemovingBookId(bookId);
+        setRemovingBookIds([...new Set([...removingBookIds, bookId])]);
         mutate({ variables: { input: { id: bookId } } });
       }}
+      removingBookIds={removingBookIds}
     />
   );
 };
