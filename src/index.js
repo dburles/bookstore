@@ -23,12 +23,14 @@ const SuspenseAuthorBooks = props => (
 render(
   <ConcurrentMode>
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
+      <>
+        <GlobalStyle />
 
-      <Router>
-        <SuspenseAllBooks exact path="/" />
-        <SuspenseAuthorBooks path="/author/:authorId" />
-      </Router>
+        <Router>
+          <SuspenseAllBooks exact path="/" />
+          <SuspenseAuthorBooks path="/author/:authorId" />
+        </Router>
+      </>
     </ThemeProvider>
   </ConcurrentMode>,
   document.getElementById('root'),
