@@ -45,7 +45,7 @@ const Books = props => {
                   ) : (
                     <FauxLink
                       color="grey.7"
-                      fontSize={1}
+                      fontSize={0}
                       onClick={() => props.onRemoveBook(book.id)}
                     >
                       {props.removingBookIds.includes(book.id)
