@@ -51,12 +51,13 @@ const handleGraphQLResponse = response => {
   };
 };
 
-const queryCache = {};
+const queryCache = new Map();
 
 window.queryCache = queryCache;
 
-const invalidateCache = () =>
-  Object.keys(queryCache).forEach(key => (queryCache[key].stale = true));
+const invalidateCache = () => {
+  queryCache.forEach(value => (value.stale = true));
+};
 
 export const useQuery = (uri, query, options = {}) => {
   // Tracks whether we should fetch or refetch queries
@@ -65,11 +66,13 @@ export const useQuery = (uri, query, options = {}) => {
   const [, update] = useState();
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
+  let cache = queryCache.get(key);
+
   const fetchAndUpdateCache = () =>
     fetchGraphQL(uri, query, options).then(response => {
-      queryCache[key].response = response;
-      queryCache[key].stale = false;
-      queryCache[key].refetching = false;
+      cache.response = response;
+      cache.stale = false;
+      cache.refetching = false;
     });
 
   // Any mounted useQuery must refetch after a mutation occurs
@@ -78,12 +81,8 @@ export const useQuery = (uri, query, options = {}) => {
       mutations.subscribe(() => {
         refetchRef.current = true;
 
-        if (
-          queryCache[key] &&
-          queryCache[key].stale &&
-          !queryCache[key].refetching
-        ) {
-          queryCache[key].refetching = true;
+        if (cache && cache.stale && !cache.refetching) {
+          cache.refetching = true;
           fetchAndUpdateCache().then(() => cacheUpdates.notify());
         }
       }),
@@ -93,19 +92,20 @@ export const useQuery = (uri, query, options = {}) => {
   useEffect(() => cacheUpdates.subscribe(() => update()), []);
 
   // Handles a fresh mount
-  if (!refetchRef.current && (!queryCache[key] || queryCache[key].stale)) {
-    if (!queryCache[key]) {
-      queryCache[key] = {};
+  if (!refetchRef.current && (!cache || (cache && cache.stale))) {
+    if (!cache) {
+      cache = {};
+      queryCache.set(key, cache);
     }
-    queryCache[key].promise = fetchAndUpdateCache();
-    throw queryCache[key].promise;
+    cache.promise = fetchAndUpdateCache();
+    throw cache.promise;
   }
 
-  if (queryCache[key].response) {
-    return queryCache[key].response;
+  if (cache.response) {
+    return cache.response;
   }
 
-  throw queryCache[key].promise;
+  throw cache.promise;
 };
 
 export const useMutation = (uri, query) => {
