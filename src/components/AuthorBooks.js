@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Books from './Books';
 import ErrorMessage from './ErrorMessage';
-import { useMutation, useQuery } from './lib/graphql';
+import useBookRemove from './hooks/useBookRemove';
+import { useQuery } from './lib/graphql';
 
 const authorQuery = /* GraphQL */ `
   query author($id: Int!) {
@@ -19,16 +20,6 @@ const authorQuery = /* GraphQL */ `
   }
 `;
 
-const bookRemoveMutation = /* GraphQL */ `
-  mutation bookRemove($input: BookRemoveInput!) {
-    bookRemove(input: $input) {
-      book {
-        id
-      }
-    }
-  }
-`;
-
 const AuthorBooksContainer = props => {
   const {
     data: { author },
@@ -37,12 +28,7 @@ const AuthorBooksContainer = props => {
     variables: { id: props.authorId },
   });
 
-  const [removingBookIds, setRemovingBookIds] = useState('');
-
-  const { mutate, error: removeError } = useMutation(
-    'http://localhost:3010/graphql',
-    bookRemoveMutation,
-  );
+  const { removeBook, removingBookIds, error: removeError } = useBookRemove();
 
   if (queryError || removeError) {
     return <ErrorMessage>{queryError || removeError}</ErrorMessage>;
@@ -52,10 +38,7 @@ const AuthorBooksContainer = props => {
     <Books
       title={author.name}
       books={author.books}
-      onRemoveBook={bookId => {
-        setRemovingBookIds([...new Set([...removingBookIds, bookId])]);
-        mutate({ variables: { input: { id: bookId } } });
-      }}
+      onRemoveBook={removeBook}
       removingBookIds={removingBookIds}
     />
   );
