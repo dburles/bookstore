@@ -1,5 +1,8 @@
 import { Router } from '@reach/router';
-import React, { ConcurrentMode, Suspense } from 'react';
+import React, {
+  unstable_ConcurrentMode as ConcurrentMode,
+  Suspense,
+} from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 import AllBooks from './components/AllBooks';
