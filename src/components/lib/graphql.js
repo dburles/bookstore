@@ -53,8 +53,6 @@ const handleGraphQLResponse = response => {
 
 const queryCache = new Map();
 
-window.queryCache = queryCache;
-
 const invalidateCache = () => {
   queryCache.forEach(value => (value.stale = true));
 };
