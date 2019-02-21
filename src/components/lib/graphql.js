@@ -89,7 +89,6 @@ export const useQuery = (uri, query, options = {}) => {
   );
 
   // Re-render the component when the cache changes
-  // XXX: Maybe only subscribe to cache updates for this specific cache key?
   useEffect(() => cacheUpdates.subscribe(() => update({})), []);
 
   // Handles a fresh mount
