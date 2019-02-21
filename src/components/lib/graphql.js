@@ -62,6 +62,7 @@ export const useQuery = (uri, query, options = {}) => {
   const refetchRef = useRef(false);
   // Used to re-render the component after a refetch
   const [, update] = useState({});
+  // Generate cache key
   const key = fnv1a(uri + query + JSON.stringify(options.variables));
 
   let cache = queryCache.get(key);
