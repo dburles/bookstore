@@ -2,9 +2,9 @@
 import { jsx, Flex } from 'theme-ui';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
-import Heading from './Heading';
 import { useFormState } from './hooks/useFormState';
 import Input from './Input';
+import Label from './Label';
 import { useMutation, useQuery } from './lib/graphql';
 import Select from './Select';
 
@@ -63,7 +63,7 @@ const AddBook = () => {
         });
       }}
     >
-      <Heading sx={{ color: 'grey.1', fontSize: 2, mb: 2 }}>Add book</Heading>
+      <Label>Add book</Label>
       <Flex sx={{ flexDirection: 'row' }}>
         <Select onChange={onChange} name="authorId">
           <option value="">Select Author</option>
@@ -80,12 +80,7 @@ const AddBook = () => {
           placeholder="Book title"
           sx={{ mx: 3 }}
         />
-        <Button
-          sx={{ bg: 'blue.4' }}
-          disabled={!formState.authorId || isSubmitting}
-        >
-          Add
-        </Button>
+        <Button disabled={!formState.authorId || isSubmitting}>Add</Button>
       </Flex>
     </form>
   );

@@ -13,7 +13,8 @@ const Layout = props => {
       <Flex sx={{ bg: 'grey.9', py: 4, justifyContent: 'center' }}>
         <Flex sx={{ px: 3, flexDirection: 'column', width: ['100%', 900] }}>
           <Heading
-            sx={{ color: 'grey.1', mb: 4, onClick: () => navigate('/') }}
+            onClick={() => navigate('/')}
+            sx={{ color: 'grey.1', mb: 4, cursor: 'pointer' }}
           >
             📚 Book 🛍 Store
           </Heading>

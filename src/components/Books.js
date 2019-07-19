@@ -11,8 +11,8 @@ const Books = props => {
       <div
         sx={{
           bg: 'white',
-          borderColor: 'grey.3',
           border: '1px solid',
+          borderColor: 'grey.3',
           borderRadius: 3,
           flexWrap: 'wrap',
         }}
@@ -20,7 +20,7 @@ const Books = props => {
         {props.books.map(book => (
           <div
             key={book.id}
-            sx={{ p: 1, borderColor: 'grey.3', borderTop: '1px solid' }}
+            sx={{ p: 1, borderTop: '1px solid', borderColor: 'grey.3' }}
           >
             <Flex sx={{ alignItems: 'top', p: 3 }}>
               <Box sx={{ width: '12.5%' }}>

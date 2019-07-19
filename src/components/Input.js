@@ -12,6 +12,7 @@ const Input = props => {
         border: '1px solid',
         borderColor: 'grey.7',
         borderRadius: 4,
+        height: 40,
       }}
       {...props}
     />

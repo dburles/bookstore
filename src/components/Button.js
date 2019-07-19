@@ -12,6 +12,7 @@ const Button = props => {
         borderRadius: 3,
         color: 'white',
         fontSize: 2,
+        fontWeight: 'bold',
       }}
       {...props}
     />

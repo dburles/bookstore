@@ -28,7 +28,7 @@ export default {
     // body background color
     background: '#ffffff',
     // primary button and link color
-    primary: '#7db9e5',
+    primary: '#4a9eda',
     // secondary color - can be used for hover states
     secondary: '#0077cc',
     // a contrast color for emphasizing UI
@@ -36,7 +36,7 @@ export default {
     // a gray or subdued color for decorative purposes
     muted: '#7f8a93',
 
-    base: '#7db9e5',
+    white: '#ffffff',
     black: '#374047',
     grey: [
       '#f8f9f9',

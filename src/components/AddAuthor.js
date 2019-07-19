@@ -2,9 +2,9 @@
 import { jsx, Flex } from 'theme-ui';
 import Button from './Button';
 import ErrorMessage from './ErrorMessage';
-import Heading from './Heading';
 import { useFormState } from './hooks/useFormState';
 import Input from './Input';
+import Label from './Label';
 import { useMutation } from './lib/graphql';
 
 const authorAddMutation = /* GraphQL */ `
@@ -45,7 +45,7 @@ const AddAuthor = () => {
         });
       }}
     >
-      <Heading sx={{ color: 'grey.1', fontSize: 2, mb: 2 }}>Add author</Heading>
+      <Label>Add author</Label>
       <Flex sx={{ flexDirection: 'row' }}>
         <Input
           name="name"
@@ -54,9 +54,7 @@ const AddAuthor = () => {
           placeholder="Author name"
           sx={{ mr: 3 }}
         />
-        <Button sx={{ bg: 'blue.4' }} disabled={isSubmitting}>
-          Add
-        </Button>
+        <Button disabled={isSubmitting}>Add</Button>
       </Flex>
     </form>
   );

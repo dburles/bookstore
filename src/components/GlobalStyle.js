@@ -11,7 +11,7 @@ const GlobalStyle = () => (
         line-height: 1.5;
       }
       a {
-        color: ${theme.colors.base};
+        color: ${theme.colors.primary};
       }
       body,
       form {
