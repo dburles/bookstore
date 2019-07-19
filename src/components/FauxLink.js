@@ -1,13 +1,14 @@
-import { Text } from 'rebass';
-import styled from 'styled-components';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import Text from './Text';
 
-const FauxLink = styled(Text)`
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-FauxLink.defaultProps = {
-  color: 'base',
+const FauxLink = props => {
+  return (
+    <Text
+      sx={{ color: 'base', textDecoration: 'underline', cursor: 'pointer' }}
+      {...props}
+    />
+  );
 };
 
 export default FauxLink;

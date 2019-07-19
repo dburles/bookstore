@@ -1,12 +1,13 @@
-import React from 'react';
-import { Flex, Heading, Box } from 'rebass';
+/** @jsx jsx */
+import { jsx, Flex } from 'theme-ui';
+import Heading from './Heading';
 import Nav from './Nav';
 
 const Container = props => {
   return (
-    <Flex flexDirection="column">
-      <Flex alignItems="center" p={3}>
-        <Heading width={1}>{props.title}</Heading>
+    <Flex sx={{ flexDirection: 'column' }}>
+      <Flex sx={{ alignItems: 'center', p: 3 }}>
+        <Heading sx={{ width: '100%' }}>{props.title}</Heading>
         <Nav />
       </Flex>
       {props.children}

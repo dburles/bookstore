@@ -1,6 +1,8 @@
-import React from 'react';
-import { Button, Flex, Box, Heading } from 'rebass';
+/** @jsx jsx */
+import { jsx, Flex } from 'theme-ui';
+import Button from './Button';
 import ErrorMessage from './ErrorMessage';
+import Heading from './Heading';
 import { useFormState } from './hooks/useFormState';
 import Input from './Input';
 import { useMutation } from './lib/graphql';
@@ -43,18 +45,16 @@ const AddAuthor = () => {
         });
       }}
     >
-      <Heading color="grey.1" fontSize={2} mb={2}>
-        Add author
-      </Heading>
-      <Flex flexDirection="row">
+      <Heading sx={{ color: 'grey.1', fontSize: 2, mb: 2 }}>Add author</Heading>
+      <Flex sx={{ flexDirection: 'row' }}>
         <Input
           name="name"
           value={formState.name}
           onChange={onChange}
           placeholder="Author name"
-          mr={3}
+          sx={{ mr: 3 }}
         />
-        <Button bg="blue.4" disabled={isSubmitting}>
+        <Button sx={{ bg: 'blue.4' }} disabled={isSubmitting}>
           Add
         </Button>
       </Flex>

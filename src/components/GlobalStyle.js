@@ -1,18 +1,25 @@
-import { createGlobalStyle } from 'styled-components';
+/** @jsx jsx */
+import { Global, css } from '@emotion/core';
+import { jsx } from 'theme-ui';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    background: ${props => props.theme.colors.grey[0]}
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
-    line-height: 1.5;
-  }
-  a {
-    color: ${props => props.theme.colors.base};
-  }
-  body, form {
-    margin: 0;
-    padding: 0;
-  }
-`;
+const GlobalStyle = () => (
+  <Global
+    styles={theme => css`
+      body {
+        background: ${theme.colors.grey[0]};
+        font-family: ${theme.fonts.body};
+        line-height: 1.5;
+      }
+      a {
+        color: ${theme.colors.base};
+      }
+      body,
+      form {
+        margin: 0;
+        padding: 0;
+      }
+    `}
+  />
+);
 
 export default GlobalStyle;

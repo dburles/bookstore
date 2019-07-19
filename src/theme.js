@@ -1,6 +1,42 @@
 export default {
+  breakpoints: ['40em', '52em', '64em'],
+  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+  fonts: {
+    body:
+      '-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol',
+    heading:
+      '-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol',
+    monospace: 'Menlo, monospace',
+  },
+  fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
+  fontWeights: {
+    body: 400,
+    heading: 700,
+    bold: 700,
+  },
+  lineHeights: {
+    body: 1.5,
+    heading: 1.125,
+  },
+  letterSpacings: {
+    body: 'normal',
+    caps: '0.2em',
+  },
   colors: {
-    base: '#07c',
+    // body color
+    text: '#374047',
+    // body background color
+    background: '#ffffff',
+    // primary button and link color
+    primary: '#7db9e5',
+    // secondary color - can be used for hover states
+    secondary: '#0077cc',
+    // a contrast color for emphasizing UI
+    accent: '#0011cc',
+    // a gray or subdued color for decorative purposes
+    muted: '#7f8a93',
+
+    base: '#7db9e5',
     black: '#374047',
     grey: [
       '#f8f9f9',

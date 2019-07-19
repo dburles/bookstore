@@ -1,15 +1,13 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { Box, Text } from 'rebass';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import Text from './Text';
 
 const ErrorMessage = props => {
   return (
-    <Box m={3} py={3} px={5} bg="red.6" color="white">
-      <Text fontWeight="bold">{props.children}</Text>
-    </Box>
+    <div sx={{ m: 3, py: 3, px: 5, bg: 'red.6', color: 'white' }}>
+      <Text sx={{ fontWeight: 'bold' }}>{props.children}</Text>
+    </div>
   );
 };
-
-ErrorMessage.propTypes = {};
 
 export default ErrorMessage;
