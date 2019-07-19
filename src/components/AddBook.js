@@ -56,7 +56,7 @@ const AddBook = () => {
 
         addBook({
           variables: {
-            input: formState,
+            input: { ...formState, authorId: Number(formState.authorId) },
           },
         });
       }}

@@ -25,7 +25,7 @@ const AuthorBooksContainer = props => {
     data: { author },
     error: queryError,
   } = useQuery('http://localhost:3010/graphql', authorQuery, {
-    variables: { id: props.authorId },
+    variables: { id: Number(props.authorId) },
   });
 
   const { removeBook, removingBookIds, error: removeError } = useBookRemove();
