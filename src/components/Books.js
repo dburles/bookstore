@@ -42,24 +42,28 @@ const Books = props => {
                   )}
                 </Text>
               </Box>
-              <Box sx={{ width: '12.5%', position: 'relative' }}>
-                <Text sx={{ textAlign: 'right' }}>
-                  {props.loadingId === book.id ? (
-                    <Spinner />
-                  ) : (
-                    <FauxLink
-                      sx={{
-                        color: 'grey.7',
-                        fontSize: 0,
-                      }}
-                      onClick={() => props.onRemoveBook(book.id)}
-                    >
-                      {props.removingBookIds.includes(book.id)
-                        ? 'Removing...'
-                        : 'Remove'}
-                    </FauxLink>
-                  )}
-                </Text>
+              <Box
+                sx={{
+                  width: '12.5%',
+                  position: 'relative',
+                  textAlign: 'right',
+                }}
+              >
+                {props.loadingId === book.id ? (
+                  <Spinner />
+                ) : (
+                  <FauxLink
+                    sx={{
+                      color: 'grey.7',
+                      fontSize: 0,
+                    }}
+                    onClick={() => props.onRemoveBook(book.id)}
+                  >
+                    {props.removingBookIds.includes(book.id)
+                      ? 'Removing...'
+                      : 'Remove'}
+                  </FauxLink>
+                )}
               </Box>
             </Flex>
           </div>
