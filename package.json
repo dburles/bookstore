@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "start": "NODE_ENV=development parcel src/index.html",
-    "build": "parcel build --detailed-report src/index.html",
+    "build": "parcel build src/index.html --detailed-report",
     "clean": "rm -rf .cache",
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
