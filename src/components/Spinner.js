@@ -11,6 +11,7 @@ const spinner = keyframes`
 const Spinner = ({ fullScreen, ...props }) => {
   return (
     <div
+      {...props}
       css={css`
         &:before {
           position: absolute;
@@ -30,7 +31,6 @@ const Spinner = ({ fullScreen, ...props }) => {
           animation: ${spinner} 0.6s linear infinite;
         }
       `}
-      {...props}
     />
   );
 };

@@ -19,7 +19,7 @@ const Layout = props => {
             📚 Book 🛍 Store
           </Heading>
 
-          <Flex sx={{ m: -3, pb: 2, flexWrap: 'wrap' }}>
+          <Flex sx={{ m: -3, flexWrap: 'wrap' }}>
             <Box sx={{ p: 3, width: ['100%', '50%'] }}>
               <AddBook />
             </Box>

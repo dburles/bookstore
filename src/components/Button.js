@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui';
 const Button = props => {
   return (
     <button
+      {...props}
       sx={{
         py: 2,
         px: 3,
@@ -14,7 +15,6 @@ const Button = props => {
         fontSize: 2,
         fontWeight: 'bold',
       }}
-      {...props}
     />
   );
 };

@@ -11,9 +11,6 @@ const Books = props => {
       <div
         sx={{
           bg: 'white',
-          border: '1px solid',
-          borderColor: 'grey.3',
-          borderRadius: 3,
           flexWrap: 'wrap',
         }}
       >

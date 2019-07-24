@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui';
 const Label = props => {
   return (
     <label
+      {...props}
       sx={{
         display: 'block',
         fontWeight: 'bold',
@@ -11,7 +12,6 @@ const Label = props => {
         fontSize: 2,
         mb: 2,
       }}
-      {...props}
     />
   );
 };
