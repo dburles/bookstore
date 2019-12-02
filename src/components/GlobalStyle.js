@@ -1,24 +1,23 @@
 /** @jsx jsx */
-import { Global, css } from '@emotion/core';
-import { jsx } from 'theme-ui';
+import { Global } from '@emotion/core';
+import { jsx, css } from 'theme-ui';
 
 const GlobalStyle = () => (
   <Global
-    styles={theme => css`
-      body {
-        background: ${theme.colors.grey[0]};
-        font-family: ${theme.fonts.body};
-        line-height: 1.5;
-      }
-      a {
-        color: ${theme.colors.primary};
-      }
-      body,
-      form {
-        margin: 0;
-        padding: 0;
-      }
-    `}
+    styles={css({
+      body: {
+        backgroundColor: 'grey.0',
+        fontFamily: 'body',
+        lineHeight: '1.5',
+      },
+      a: {
+        color: 'primary',
+      },
+      'body, form': {
+        margin: 0,
+        padding: 0,
+      },
+    })}
   />
 );
 
