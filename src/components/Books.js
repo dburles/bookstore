@@ -1,30 +1,31 @@
-import React from 'react';
-import { Text, Flex, Box, Card } from 'rebass';
+/** @jsx jsx */
+import { jsx, Flex, Box } from 'theme-ui';
 import Container from './Container';
 import FauxLink from './FauxLink';
 import Spinner from './Spinner';
+import Text from './Text';
 
 const Books = props => {
   return (
     <Container title={props.title}>
-      <Card
-        bg="white"
-        borderColor="grey.3"
-        border="1px solid"
-        borderRadius={3}
-        flexWrap="wrap"
+      <div
+        sx={{
+          bg: 'white',
+          flexWrap: 'wrap',
+        }}
       >
         {props.books.map(book => (
-          <Card key={book.id} p={1} borderColor="grey.3" borderTop="1px solid">
-            <Flex alignItems="top" p={3}>
-              <Box width={1 / 8}>
-                <Text fontSize={0} color="grey.7">
-                  {book.id}
-                </Text>
+          <div
+            key={book.id}
+            sx={{ p: 1, borderTop: '1px solid', borderColor: 'grey.3' }}
+          >
+            <Flex sx={{ alignItems: 'top', p: 3 }}>
+              <Box sx={{ width: '12.5%' }}>
+                <Text sx={{ fontSize: 0, color: 'grey.7' }}>{book.id}</Text>
               </Box>
-              <Box width={1}>
-                <Text fontSize={2}>{book.title}</Text>
-                <Text fontSize={1} color="grey.8">
+              <Box sx={{ width: '100%' }}>
+                <Text sx={{ fontSize: 2 }}>{book.title}</Text>
+                <Text sx={{ fontSize: 1, color: 'grey.8' }}>
                   {props.onClickAuthor ? (
                     <FauxLink
                       onClick={() =>
@@ -38,27 +39,33 @@ const Books = props => {
                   )}
                 </Text>
               </Box>
-              <Box width={1 / 8} style={{ position: 'relative' }}>
-                <Text textAlign="right">
-                  {props.loadingId === book.id ? (
-                    <Spinner />
-                  ) : (
-                    <FauxLink
-                      color="grey.7"
-                      fontSize={0}
-                      onClick={() => props.onRemoveBook(book.id)}
-                    >
-                      {props.removingBookIds.includes(book.id)
-                        ? 'Removing...'
-                        : 'Remove'}
-                    </FauxLink>
-                  )}
-                </Text>
+              <Box
+                sx={{
+                  width: '12.5%',
+                  position: 'relative',
+                  textAlign: 'right',
+                }}
+              >
+                {props.loadingId === book.id ? (
+                  <Spinner />
+                ) : (
+                  <FauxLink
+                    sx={{
+                      color: 'grey.7',
+                      fontSize: 0,
+                    }}
+                    onClick={() => props.onRemoveBook(book.id)}
+                  >
+                    {props.removingBookIds.includes(book.id)
+                      ? 'Removing...'
+                      : 'Remove'}
+                  </FauxLink>
+                )}
               </Box>
             </Flex>
-          </Card>
+          </div>
         ))}
-      </Card>
+      </div>
     </Container>
   );
 };

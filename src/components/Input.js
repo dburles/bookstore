@@ -1,31 +1,22 @@
-import styled from 'styled-components';
-import {
-  space,
-  width,
-  fontSize,
-  border,
-  borderRadius,
-  borderColor,
-} from 'styled-system';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 
-const Input = styled.input`
-  ${space}
-  ${width}
-  ${fontSize}
-  ${border}
-  ${borderColor}
-  ${borderRadius}
-  height: 40px;
-`;
-
-Input.defaultProps = {
-  fontSize: 1,
-  px: 3,
-  width: 1,
-  type: 'text',
-  border: '1px solid',
-  borderColor: 'grey.7',
-  borderRadius: 4,
+const Input = props => {
+  return (
+    <input
+      type="text"
+      sx={{
+        fontSize: 1,
+        px: 3,
+        width: '100%',
+        border: '1px solid',
+        borderColor: 'grey.7',
+        borderRadius: 4,
+        height: 40,
+      }}
+      {...props}
+    />
+  );
 };
 
 export default Input;

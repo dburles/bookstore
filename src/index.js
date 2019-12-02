@@ -4,7 +4,7 @@ import React, {
   Suspense,
 } from 'react';
 import { render } from 'react-dom';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider } from 'theme-ui';
 import AllBooks from './components/AllBooks';
 import AuthorBooks from './components/AuthorBooks';
 import GlobalStyle from './components/GlobalStyle';
@@ -13,13 +13,13 @@ import Spinner from './components/Spinner';
 import theme from './theme';
 
 const SuspenseAllBooks = () => (
-  <Suspense maxDuration={2000} fallback={<Spinner full />}>
+  <Suspense maxDuration={2000} fallback={<Spinner fullScreen />}>
     <AllBooks />
   </Suspense>
 );
 
 const SuspenseAuthorBooks = props => (
-  <Suspense maxDuration={2000} fallback={<Spinner full />}>
+  <Suspense maxDuration={2000} fallback={<Spinner fullScreen />}>
     <AuthorBooks {...props} />
   </Suspense>
 );

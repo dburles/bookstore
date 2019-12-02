@@ -1,4 +1,5 @@
-import React from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 import Books from './Books';
 import ErrorMessage from './ErrorMessage';
 import useBookRemove from './hooks/useBookRemove';

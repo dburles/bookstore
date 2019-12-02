@@ -1,8 +1,10 @@
-import React from 'react';
-import { Button, Flex, Box, Heading } from 'rebass';
+/** @jsx jsx */
+import { jsx, Flex } from 'theme-ui';
+import Button from './Button';
 import ErrorMessage from './ErrorMessage';
 import { useFormState } from './hooks/useFormState';
 import Input from './Input';
+import Label from './Label';
 import { useMutation, useQuery } from './lib/graphql';
 import Select from './Select';
 
@@ -61,10 +63,8 @@ const AddBook = () => {
         });
       }}
     >
-      <Heading color="grey.1" fontSize={2} mb={2}>
-        Add book
-      </Heading>
-      <Flex flexDirection="row">
+      <Label>Add book</Label>
+      <Flex sx={{ flexDirection: 'row' }}>
         <Select onChange={onChange} name="authorId">
           <option value="">Select Author</option>
           {authors.map(author => (
@@ -78,11 +78,9 @@ const AddBook = () => {
           value={formState.title}
           onChange={onChange}
           placeholder="Book title"
-          mx={3}
+          sx={{ mx: 3 }}
         />
-        <Button bg="blue.4" disabled={!formState.authorId || isSubmitting}>
-          Add
-        </Button>
+        <Button disabled={!formState.authorId || isSubmitting}>Add</Button>
       </Flex>
     </form>
   );

@@ -1,15 +1,15 @@
-import styled from 'styled-components';
-import { space, width, fontSize } from 'styled-system';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
 
-const Select = styled.select`
-  ${space}
-  ${width}
-  ${fontSize}
-  height: 40px;
-`;
-
-Select.defaultProps = {
-  fontSize: 1,
+const Select = props => {
+  return (
+    <select
+      {...props}
+      sx={{
+        fontSize: 1,
+      }}
+    />
+  );
 };
 
 export default Select;
